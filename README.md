@@ -1,2 +1,4 @@
 # tsoha-organization
-Project for the course tsoha
+The end goal of the project is a prototype for what an organization's site could look like. The site will allow users to browse through different menus that contain info regarding the organization, its members and other relevant info. The site will also allow users to create an account and log in, which will give additional functionality to the user depending on the status of the account. Admins and members of the board will have access to everything regarding the site, including switching the status of accounts, while certain committee members will have more functionality than a freshly created account.
+
+Users will also have the opportunity to interact with different parts of the site. One section will allow logged in users to leave public comments and reviews, while another will give access to statistics that are related to the organization. I will implement further functionality to the site as I figure out more things that seem like they would fit.
