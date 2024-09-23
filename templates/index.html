@@ -1,0 +1,32 @@
+<title>Organization</title>
+<h1 style="text-align: center;">The Organization</h1>
+<p style="text-align: center;">Welcome to The Organizations site!</p>
+
+
+{% if session.user %}
+
+<p>You are currently logged in as {{session.user}}.</p>
+<a href="{{url_for('user')}}" class="button">User page</a>
+<a href="{{url_for('logout_page')}}" class="button">Sign out</a>
+
+{% else %}
+
+<a href="{{url_for('registration_page')}}" class="button">Register here</a>
+<a href="{{url_for('login_page')}}" class="button">Log in here</a>
+
+{% endif %}
+
+<a href="{{url_for('question_board')}}" class="button">Read questions</a>
+<a href="{{url_for('review_page')}}" class="button">Leave a review</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>

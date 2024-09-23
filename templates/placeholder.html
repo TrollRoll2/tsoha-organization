@@ -1,0 +1,47 @@
+<title>Organization</title>
+<h1 style="text-align: center;">[Organization title]</h1>
+<img src="/images/smiley.jpg">
+<p style="text-align: center;">Welcome to organizations public site! You may choose to explore the site through the hamburger menu in the upper right corner.</p>
+<a href="{{url_for('registration_page')}}" class="button">Register here</a>
+
+<style>
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    background-color: black;
+
+}
+</style>
+
+from flask import Flask
+from flask import render_template
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/registration")
+def registration_page():
+    return render_template("registration.html")
+
+    <title>Organization</title>
+    <h1 style="text-align: center;">[Organization title]</h1>
+    <p style="text-align: center;">Welcome to organizations public site! You may choose to explore the site through the hamburger menu in the upper right corner.</p>
+    <a href="{{url_for('registration_page')}}" class="button">Register here</a>
+    
+    <style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: white;
+    
+    }
+    </style>

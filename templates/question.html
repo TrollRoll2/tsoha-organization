@@ -1,0 +1,30 @@
+{% if session.user %}
+
+<p>You can leave a question regarding the organization below.</p>
+<form action="{{url_for('question_page')}}" method="POST">
+    <p>Question:</p>
+    <p><input type="text" name="question" required /></p>
+    <p><input type="submit" value="Send question"/></p>
+</form>
+
+{% else %}
+
+<p>You need to be logged in to leave a question.</p>
+<a href="{{url_for('login_page')}}" class="button">Log in here</a>
+
+{% endif %}
+
+<a href="{{url_for('question_board')}}" class="button">Read asked questions here</a>
+<a href="{{url_for('index')}}" class="button">Home</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>

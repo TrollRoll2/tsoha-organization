@@ -1,0 +1,32 @@
+<title>Organization</title>
+
+{% if session.user %}
+
+<p>You are already logged in as the user {{ session.user }}</p>
+<a href="{{url_for('logout_page')}}" class="button">Sign out</a>
+
+{% else %}
+<h1>Register an account here:</h1>
+<form action="{{url_for('registration_page')}}" method="POST">
+    <p>Username:</p>
+    <p><input type="text" name="username" required /></p>
+    <p>Password:</p>
+    <p><input type="password" name="password" required/></p>
+    <p><input type="submit" value="Register account"/></p>
+</form>
+
+{% endif %}
+
+<a href="{{url_for('index')}}"" class="button">Home</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>

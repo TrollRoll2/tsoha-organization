@@ -1,0 +1,36 @@
+{% if session.user %}
+
+{% if error %}
+    <p >{{ error }}</p>
+{% endif %}
+
+<p>You can leave a review below.</p>
+<form action="{{url_for('review_page')}}" method="POST">
+    <p>Write your review here:</p>
+    <textarea name="review" required></textarea>
+    <p>Give a rating from 1-10</p>
+    <p><input type="number" name="rating" min="1" max="10" required /></p>
+    <p><input type="submit" value="Send review"/></p>
+</form>
+
+{% else %}
+
+<p>You need to be logged in to leave a review.</p>
+<a href="{{url_for('login_page')}}" class="button">Log in here</a>
+
+{% endif %}
+
+<a href="{{url_for('review_board')}}" class="button">Read other reviews here</a>
+<a href="{{url_for('index')}}" class="button">Home</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>

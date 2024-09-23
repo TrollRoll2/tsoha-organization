@@ -1,0 +1,36 @@
+<p>Questions that have been asked:</p>
+
+{% for question in questions %}
+
+<hr>
+<i>Question {{question[0]}}:</i>
+<p>
+<i>{{question[1]}}</i>
+<hr>
+
+{% endfor %}
+
+{% if session.user %}
+
+<a href="{{url_for('question_page')}}" class="button">Ask a question</a>
+
+{% else %}
+
+<p>Only logged in users can ask questions.</p>
+<a href="{{url_for('login_page')}}" class="button">Log in here</a>
+
+{% endif %}
+
+<a href="{{url_for('index')}}" class="button">Home</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>

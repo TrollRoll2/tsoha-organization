@@ -1,0 +1,30 @@
+{% if session.user %}
+
+<p>You are already signed in.</p>
+<a href="{{url_for('logout_page')}}" class="button">Sign out</a>
+
+{% else %}
+
+<form action="#" method="POST">
+    <p>Username:</p>
+    <p><input type="text" name="username" required /></p>
+    <p>Password:</p>
+    <p><input type="password" name="password" required/></p>
+    <p><input type="submit" value="Log in"/></p>
+</form>
+
+{% endif %}
+
+<a href="{{url_for('index')}}"" class="button">Home</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>
