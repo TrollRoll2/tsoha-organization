@@ -1,4 +1,6 @@
-# tsoha-organization
-The end goal of the project is a prototype for what an organization's site could look like. The site will allow users to browse through different menus that contain info regarding the organization, its members and other relevant info. The site will also allow users to create an account and log in, which will give additional functionality to the user depending on the status of the account. Admins and members of the board will have access to everything regarding the site, including switching the status of accounts, while certain committee members will have more functionality than a freshly created account.
+I have been a little sidetracked so the app is still in a rather primitive state. There are a couple of base functionalities that can be tested, such as creating an account, asking questions on a question board and leaving reviews for the website. More functionality will be added until the next review as well as improved quality and security for the code. 
 
-Users will also have the opportunity to interact with different parts of the site. One section will allow logged in users to leave public comments and reviews, while another will give access to statistics that are related to the organization. I will implement further functionality to the site as I figure out more things that seem like they would fit.
+In order to test the app the repository has to be cloned. A .env file will also have to be created with a custom SECRET_KEY and a DATABASE_URL. The database so far will have to include 3 different databases:
+1. accounts (id SERIAL PRIMARY KEY, username TEXT UNIQUE, password TEXT, role UNIQUE)
+2. questions (id SERIAL PRIMARY KEY, question TEXT, user_id INTEGER REFERENCES accounts)
+3. reviews (id SERIAL PRIMARY KEY, review TEXT, rating INTEGER, user_id INTEGER REFERENCES accounts)
