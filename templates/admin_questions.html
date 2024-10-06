@@ -1,0 +1,16 @@
+{% for question in questions %}
+
+<hr>
+<i>id: {{question [0]}} user: {{question[2]}}</i> 
+<p>
+<i>question: {{question[1]}}</i>
+<p>
+<form action="#" method="POST">
+    <input type="hidden" name="question_id" value="{{question [0]}}" />
+    <p><input type="submit" name="action" value="Delete question" /></p>
+</form>
+<hr>
+
+{% endfor %}
+
+<a href="{{url_for('index')}}" class="button">Home</a>

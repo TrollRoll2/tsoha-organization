@@ -1,0 +1,18 @@
+{% for review in reviews %}
+
+<hr>
+<i>id: {{review [0]}} user: {{review[3]}}</i> 
+<p>
+<i>review: {{review[1]}}</i>
+<p>
+<i>score: {{review[2]}}</i>
+<p>
+<form action="#" method="POST">
+    <input type="hidden" name="review_id" value="{{review [0]}}" />
+    <p><input type="submit" value="Delete review" /></p>
+</form>
+<hr>
+
+{% endfor %}
+
+<a href="{{url_for('index')}}" class="button">Home</a>

@@ -183,3 +183,92 @@ def review_board():
     result = db.session.execute(sql)
     reviews = result.fetchall()
     return render_template("review_board.html", reviews=reviews)
+
+@app.route("/admin")
+def control_center():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    try:
+        account_id = session["account_id"]
+        sql = text("SELECT role FROM accounts WHERE id = :user_id")
+        admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+        if admincheck[0] == "admin":
+            return render_template("admin.html")
+        
+        else:
+            return render_template("error.html")
+    
+    except Exception as e:
+        print(f"Error occured: {e}")
+        return render_template("error.html")
+    
+@app.route("/admin/reviews", methods=["POST", "GET"])
+def admin_reviews():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    if request.method == "POST":
+        review_id = request.form["review_id"]
+        try:
+            sql = text("DELETE FROM reviews WHERE id=:review_id")
+            result = db.session.execute(sql, {"review_id":review_id})
+            db.session.commit()
+            return redirect("/admin/reviews")
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
+            return render_template("error.html")
+
+    if request.method == "GET":
+
+        try:
+            account_id = session["account_id"]
+            sql = text("SELECT role FROM accounts WHERE id = :user_id")
+            admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+            if admincheck[0] != "admin":
+                return render_template("error.html")
+            
+            sql_reviews = text("SELECT * FROM reviews")
+            result = db.session.execute(sql_reviews)
+            reviews = result.fetchall()
+            return render_template("admin_reviews.html", reviews=reviews)
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
+            return render_template("error.html")
+        
+@app.route("/admin/questions", methods=["POST", "GET"])
+def admin_questions():
+    if "user" not in session:
+        redirect(url_for("login_page"))
+
+    if request.method == "POST":
+        question_id = request.form["question_id"]
+        try:
+            sql = text("DELETE FROM questions WHERE id=:question_id")
+            result = db.session.execute(sql, {"question_id":question_id})
+            db.session.commit()
+            return redirect("/admin/questions")
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
+            return render_template("error.html")
+
+    if request.method == "GET":
+
+        try:
+            account_id = session["account_id"]
+            sql = text("SELECT role FROM accounts WHERE id = :user_id")
+            admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+            if admincheck[0] != "admin":
+                return render_template("error.html")
+            
+            sql_questions = text("SELECT * FROM questions")
+            result = db.session.execute(sql_questions)
+            questions = result.fetchall()
+            return render_template("admin_questions.html", questions=questions)
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
+            return render_template("error.html")
