@@ -1,8 +1,21 @@
+{% if review %}
+
 <p>You have left the following review:</p>
 
 <hr>
 <i>{{review[0]}} {{review[1]}}/10</i>
+<p>
+<form action="#" method="POST">
+    <p><input type="submit" value="Delete review" /></p>
+</form>
 <hr>
+
+{% else %}
+
+<p>You haven't left a review yet.</p>
+<a href="{{url_for('review_page')}}" class="button">Leave a review</a> <br>
+
+{% endif %}
 
 
 <a href="{{url_for('user')}}" class="button">User page</a>

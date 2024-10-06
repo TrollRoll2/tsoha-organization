@@ -3,9 +3,14 @@
 {% for question in questions %}
 
 <hr>
-<i>Question {{question[0]}}:</i>
+<i>Question:</i>
 <p>
 <i>{{question[1]}}</i>
+<p>
+<form action="#" method="POST">
+    <input type="hidden" name="question" value="{{ question[0] }}" />
+    <p><input type="submit" value="Delete question" /></p>
+</form>
 <hr>
 
 {% endfor %}

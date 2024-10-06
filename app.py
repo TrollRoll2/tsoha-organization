@@ -85,29 +85,55 @@ def user():
         return redirect("/")
     
 
-@app.route("/user/questions")
+@app.route("/user/questions", methods=["POST", "GET"])
 def user_questions():
-    if "user" in session:
-        account_id = session["account_id"]
-        sql = text("SELECT id, question FROM questions " \
-                   "WHERE user_id = :account_id")
-        result = db.session.execute(sql, {"account_id":account_id})
-        questions = result.fetchall()
-        return render_template("user_questions.html", questions=questions)
-    else:
-        return redirect("/")
+    if request.method == "POST":
+        question = request.form["question"]
+        try:
+            sql = text("DELETE FROM questions WHERE id=:question")
+            result = db.session.execute(sql, {"question":question})
+            db.session.commit()
+            return redirect("/user/questions")
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
+            return render_template("error.html")
+
+    if request.method == "GET":
+        if "user" in session:
+            account_id = session["account_id"]
+            sql = text("SELECT id, question FROM questions " \
+                    "WHERE user_id = :account_id")
+            result = db.session.execute(sql, {"account_id":account_id})
+            questions = result.fetchall()
+            return render_template("user_questions.html", questions=questions)
+        else:
+            return redirect("/")
     
-@app.route("/user/review")
+@app.route("/user/review", methods=["POST", "GET"])
 def user_review():
-    if "user" in session:
+    if request.method == "POST":
         account_id = session["account_id"]
-        sql = text("SELECT review, rating FROM reviews " \
-                   "WHERE user_id = :account_id")
-        result = db.session.execute(sql, {"account_id":account_id})
-        review = result.fetchone()
-        return render_template("user_review.html", review=review)
-    else:
-        return redirect("/")
+        try:
+            sql = text("DELETE FROM reviews WHERE user_id=:account_id")
+            result = db.session.execute(sql, {"account_id":account_id})
+            db.session.commit()
+            return redirect("/user/review")
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
+            return render_template("error.html")
+
+    if request.method == "GET":
+        if "user" in session:
+            account_id = session["account_id"]
+            sql = text("SELECT review, rating FROM reviews " \
+                    "WHERE user_id = :account_id")
+            result = db.session.execute(sql, {"account_id":account_id})
+            review = result.fetchone()
+            return render_template("user_review.html", review=review)
+        else:
+            return redirect("/")
     
 @app.route("/question", methods=["POST", "GET"])
 def question_page():
