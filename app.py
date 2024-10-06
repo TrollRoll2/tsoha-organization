@@ -47,16 +47,25 @@ def login_page():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        sql = text("SELECT id, password FROM accounts WHERE username=:username")
-        result = db.session.execute(sql, {"username":username})
-        user = result.fetchone()
-        if user:
+        
+        try:
+            sql = text("SELECT id, password FROM accounts WHERE username=:username")
+            result = db.session.execute(sql, {"username": username})
+            user = result.fetchone()
+
+            if user is None:
+                return render_template("error.html", message="User not found")
+
             if check_password_hash(user.password, password):
                 session["user"] = username
                 session["account_id"] = user.id
                 return redirect("/")
-
-        else:
+            
+            else:
+                return render_template("error.html", message="Invalid password")
+        
+        except Exception as e:
+            print(f"Error occured: {e}")
             return render_template("error.html")
 
 
