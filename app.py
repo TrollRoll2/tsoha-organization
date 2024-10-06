@@ -41,7 +41,6 @@ def registration_page():
             print(f"Error occurred: {e}")
             return render_template("error.html")
 
-
 @app.route("/login", methods=["POST", "GET"])
 def login_page():
     if request.method == "POST":
@@ -75,6 +74,7 @@ def login_page():
 @app.route("/logout")
 def logout_page():
     del session["user"]
+    del session["account_id"]
     return redirect("/")
 
 @app.route("/user")
@@ -150,7 +150,7 @@ def question_page():
     
 @app.route("/questions")
 def question_board():
-    sql = text("SELECT * FROM questions")
+    sql = text("SELECT * FROM questions WHERE approved = TRUE")
     result = db.session.execute(sql)
     questions = result.fetchall()
     return render_template("question_board.html", questions=questions)
@@ -245,9 +245,17 @@ def admin_questions():
 
     if request.method == "POST":
         question_id = request.form["question_id"]
+        action = request.form["action"]
+
         try:
-            sql = text("DELETE FROM questions WHERE id=:question_id")
-            result = db.session.execute(sql, {"question_id":question_id})
+            if action == "Delete question":
+                sql = text("DELETE FROM questions WHERE id=:question_id")
+                result = db.session.execute(sql, {"question_id":question_id})
+
+            elif action == "Approve question":
+                sql = text("UPDATE questions SET approved = TRUE WHERE id=:question_id")
+                result = db.session.execute(sql, {"question_id":question_id})
+
             db.session.commit()
             return redirect("/admin/questions")
         

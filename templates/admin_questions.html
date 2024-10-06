@@ -7,6 +7,9 @@
 <p>
 <form action="#" method="POST">
     <input type="hidden" name="question_id" value="{{question [0]}}" />
+    {% if question[3] == False %}
+    <p><input type="submit" name="action" value="Approve question" /></p>
+    {% endif %}
     <p><input type="submit" name="action" value="Delete question" /></p>
 </form>
 <hr>
