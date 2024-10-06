@@ -15,7 +15,61 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
+    if "user" in session:
+        account_id = session["account_id"]
+        sql = text("SELECT role FROM accounts WHERE id = :user_id")
+        admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+        if admincheck[0] == "admin":
+            return render_template("index.html", admin="confirm")
+        
     return render_template("index.html") 
+
+@app.route("/accounts")
+def accounts():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    try:
+        account_id = session["account_id"]
+        sql = text("SELECT role FROM accounts WHERE id = :user_id")
+        admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+        if admincheck[0] != "admin":
+            return render_template("error.html")
+        sql_accounts = text("SELECT * FROM accounts ORDER BY id")
+        result = db.session.execute(sql_accounts)
+        users = result.fetchall()
+        return render_template("accounts.html", users=users)
+    
+    except Exception as e:
+        print(f"Error occured: {e}")
+        return render_template("error.html")
+    
+@app.route("/account/<int:id>")
+def account(id):
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    try:
+        account_id = session["account_id"]
+        sql = text("SELECT role FROM accounts WHERE id = :user_id")
+        admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+        if admincheck[0] != "admin":
+            return render_template("error.html")
+        sql_account = text("SELECT username FROM accounts WHERE id = :account_id")
+        result = db.session.execute(sql_account, {"account_id":id})
+        user = result.fetchone()
+        sql_questions = text("SELECT id, question, approved FROM questions WHERE user_id = :account_id")
+        result2 = db.session.execute(sql_questions, {"account_id":id})
+        questions = result2.fetchall()
+        sql_review = text("SELECT review, rating FROM reviews WHERE user_id = :account_id")
+        result3 = db.session.execute(sql_review, {"account_id":id})
+        review = result3.fetchone()
+        return render_template("account_info.html", user=user, questions=questions, review=review)
+
+    except Exception as e:
+        print(f"Error occured: {e}")
+        return render_template("error.html")
+
 
 @app.route("/registration", methods=["POST", "GET"])
 def registration_page():

@@ -1,0 +1,38 @@
+<p>The user {{user[0]}} has asked the following questions:</p>
+
+{% for question in questions %}
+
+<hr>
+<i>Question:</i>
+<p>
+<i>{{question[1]}}</i>
+<p>
+<i>Approved: {{question[2]}}</i>
+<hr>
+
+{% endfor %}
+
+<p>The user {{user[0]}} has left the following review:</p>
+
+{% if review %}
+
+<hr>
+<i>{{review[0]}} {{review[1]}}/10</i>
+<hr>
+
+{% endif %}
+
+<a href="{{url_for('accounts')}}" class="button">View other accounts</a>
+<a href="{{url_for('index')}}" class="button">Home</a>
+
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        background-color: blue;
+    
+    }
+</style>

@@ -1,0 +1,16 @@
+{% for user in users %}
+
+<hr>
+<i>Username: {{user[1]}}</i>
+<p>
+<i>account id: {{user[0]}}</i>
+<p>
+<i>role: {{user[3]}}</i>
+<form action="{{url_for('account', id=user[0])}}" method="GET">
+    <input type="submit" name="action" value="More information" />
+</form>
+<hr>
+
+{% endfor %}
+
+<a href="{{url_for('index')}}" class="button">Home</a>
