@@ -34,15 +34,14 @@ def accounts():
         sql = text("SELECT role FROM accounts WHERE id = :user_id")
         admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
         if admincheck[0] != "admin":
-            return render_template("error.html")
+            return render_template("unauthorized.html")
         sql_accounts = text("SELECT * FROM accounts ORDER BY id")
         result = db.session.execute(sql_accounts)
         users = result.fetchall()
         return render_template("accounts.html", users=users)
     
-    except Exception as e:
-        print(f"Error occured: {e}")
-        return render_template("error.html")
+    except:
+        return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
     
 @app.route("/account/<int:id>")
 def account(id):
@@ -54,7 +53,7 @@ def account(id):
         sql = text("SELECT role FROM accounts WHERE id = :user_id")
         admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
         if admincheck[0] != "admin":
-            return render_template("error.html")
+            return render_template("unauthorized.html")
         sql_account = text("SELECT username FROM accounts WHERE id = :account_id")
         result = db.session.execute(sql_account, {"account_id":id})
         user = result.fetchone()
@@ -66,9 +65,8 @@ def account(id):
         review = result3.fetchone()
         return render_template("account_info.html", user=user, questions=questions, review=review)
 
-    except Exception as e:
-        print(f"Error occured: {e}")
-        return render_template("error.html")
+    except:
+        return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
 
 @app.route("/registration", methods=["POST", "GET"])
@@ -91,9 +89,8 @@ def registration_page():
             session["account_id"] = user.id
             return redirect("/")
         
-        except Exception as e:
-            print(f"Error occurred: {e}")
-            return render_template("error.html")
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
 @app.route("/login", methods=["POST", "GET"])
 def login_page():
@@ -117,9 +114,8 @@ def login_page():
             else:
                 return render_template("error.html", message="Invalid password")
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
 
     if request.method == "GET":  
@@ -149,9 +145,8 @@ def user_questions():
             db.session.commit()
             return redirect("/user/questions")
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
     if request.method == "GET":
         if "user" in session:
@@ -174,9 +169,8 @@ def user_review():
             db.session.commit()
             return redirect("/user/review")
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:            
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
     if request.method == "GET":
         if "user" in session:
@@ -251,11 +245,10 @@ def control_center():
             return render_template("admin.html")
         
         else:
-            return render_template("error.html")
+            return render_template("unauthorized.html")
     
-    except Exception as e:
-        print(f"Error occured: {e}")
-        return render_template("error.html")
+    except:        
+        return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
     
 @app.route("/admin/reviews", methods=["POST", "GET"])
 def admin_reviews():
@@ -270,9 +263,8 @@ def admin_reviews():
             db.session.commit()
             return redirect("/admin/reviews")
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:          
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
     if request.method == "GET":
 
@@ -281,16 +273,15 @@ def admin_reviews():
             sql = text("SELECT role FROM accounts WHERE id = :user_id")
             admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
             if admincheck[0] != "admin":
-                return render_template("error.html")
+                return render_template("unauthorized.html")
             
             sql_reviews = text("SELECT * FROM reviews")
             result = db.session.execute(sql_reviews)
             reviews = result.fetchall()
             return render_template("admin_reviews.html", reviews=reviews)
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
         
 @app.route("/admin/questions", methods=["POST", "GET"])
 def admin_questions():
@@ -313,9 +304,8 @@ def admin_questions():
             db.session.commit()
             return redirect("/admin/questions")
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 
     if request.method == "GET":
 
@@ -324,13 +314,12 @@ def admin_questions():
             sql = text("SELECT role FROM accounts WHERE id = :user_id")
             admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
             if admincheck[0] != "admin":
-                return render_template("error.html")
+                return render_template("unauthorized.html")
             
             sql_questions = text("SELECT * FROM questions")
             result = db.session.execute(sql_questions)
             questions = result.fetchall()
             return render_template("admin_questions.html", questions=questions)
         
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render_template("error.html")
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
