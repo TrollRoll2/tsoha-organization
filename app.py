@@ -175,7 +175,7 @@ def user_review():
     if request.method == "GET":
         if "user" in session:
             account_id = session["account_id"]
-            sql = text("SELECT review, rating FROM reviews " \
+            sql = text("SELECT review, rating, approved FROM reviews " \
                     "WHERE user_id = :account_id")
             result = db.session.execute(sql, {"account_id":account_id})
             review = result.fetchone()
@@ -227,7 +227,7 @@ def review_page():
     
 @app.route("/reviews")
 def review_board():
-    sql = text("SELECT review, rating, user_id FROM reviews")
+    sql = text("SELECT review, rating, user_id FROM reviews WHERE approved = TRUE")
     result = db.session.execute(sql)
     reviews = result.fetchall()
     return render_template("review_board.html", reviews=reviews)
@@ -257,12 +257,20 @@ def admin_reviews():
 
     if request.method == "POST":
         review_id = request.form["review_id"]
+        action = request.form["action"]
+
         try:
-            sql = text("DELETE FROM reviews WHERE id=:review_id")
-            result = db.session.execute(sql, {"review_id":review_id})
+            if action == "Delete question":
+                sql = text("DELETE FROM reviews WHERE id=:review_id")
+                result = db.session.execute(sql, {"review_id":review_id})
+
+            elif action == "Approve review":
+                sql = text("UPDATE reviews SET approved = TRUE WHERE id=:review_id")
+                result = db.session.execute(sql, {"review_id":review_id})
+
             db.session.commit()
             return redirect("/admin/reviews")
-        
+
         except:          
             return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
 

@@ -10,6 +10,12 @@
 </form>
 <hr>
 
+{% if review[2] == False %}
+
+<p>Your review is currently pending approval.</p>
+
+{% endif %}
+
 {% else %}
 
 <p>You haven't left a review yet.</p>

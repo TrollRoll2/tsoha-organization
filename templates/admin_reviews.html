@@ -9,6 +9,9 @@
 <p>
 <form action="#" method="POST">
     <input type="hidden" name="review_id" value="{{review [0]}}" />
+    {% if review[4] == False %}
+    <p><input type="submit" name="action" value="Approve review" /></p>
+    {% endif %}
     <p><input type="submit" value="Delete review" /></p>
 </form>
 <hr>
