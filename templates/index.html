@@ -1,7 +1,14 @@
-<title>Organization</title>
+<title>The Organization</title>
 <h1 style="text-align: center;">The Organization</h1>
 <p style="text-align: center;">Welcome to The Organizations site!</p>
 
+{% if admin == "confirm" %}
+
+<a href="{{url_for('accounts')}}" class="button">View all accounts</a>
+
+<a href="{{url_for('control_center')}}" class="button">Admin page</a>
+
+{% endif %}
 
 {% if session.user %}
 
@@ -24,7 +31,7 @@
         display: inline-block;
         padding: 10px 20px;
         font-size: 16px;
-        color: black;
+        color: white;
         text-align: center;
         background-color: blue;
     
