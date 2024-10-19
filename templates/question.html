@@ -1,3 +1,7 @@
+{% extends "layout.html" %}
+{% block title %}Leave a question{% endblock %}
+{% block content %}
+
 {% if session.user %}
 
 <p>You can leave a question regarding the organization below.</p>
@@ -14,17 +18,4 @@
 
 {% endif %}
 
-<a href="{{url_for('question_board')}}" class="button">Read asked questions here</a>
-<a href="{{url_for('index')}}" class="button">Home</a>
-
-<style>
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: black;
-        text-align: center;
-        background-color: blue;
-    
-    }
-</style>
+{% endblock %}

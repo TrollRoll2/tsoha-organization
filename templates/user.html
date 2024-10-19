@@ -1,16 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}User page{% endblock %}
+{% block content %}
+
 <p>Hello {{session.user}}. You are account number {{session.account_id}}!</p>
 <a href="{{url_for('user_questions')}}" class="button">Review your questions</a>
 <a href="{{url_for('user_review')}}" class="button">Check your review</a>
 <a href="{{url_for('index')}}"" class="button">Home</a>
 
-<style>
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: black;
-        text-align: center;
-        background-color: blue;
-    
-    }
-</style>
+{% endblock %}

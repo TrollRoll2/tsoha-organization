@@ -1,3 +1,7 @@
+{% extends "layout.html" %}
+{% block title %}Questions{% endblock %}
+{% block content %}
+
 <p>Questions that have been asked:</p>
 
 {% for question in questions %}
@@ -23,14 +27,4 @@
 
 <a href="{{url_for('index')}}" class="button">Home</a>
 
-<style>
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: black;
-        text-align: center;
-        background-color: blue;
-    
-    }
-</style>
+{% endblock %}

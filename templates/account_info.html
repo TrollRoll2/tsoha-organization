@@ -1,4 +1,4 @@
-<p>The user {{user[0]}} has asked the following questions:</p>
+<h1>The user {{user[0]}} has asked the following questions:</h1>
 
 {% for question in questions %}
 
@@ -12,7 +12,7 @@
 
 {% endfor %}
 
-<p>The user {{user[0]}} has left the following review:</p>
+<h1>The user {{user[0]}} has left the following review:</h1>
 
 {% if review %}
 
@@ -25,12 +25,12 @@
 <a href="{{url_for('accounts')}}" class="button">View other accounts</a>
 <a href="{{url_for('index')}}" class="button">Home</a>
 
-<style>
+<style> 
     .button {
         display: inline-block;
         padding: 10px 20px;
         font-size: 16px;
-        color: black;
+        color: white;
         text-align: center;
         background-color: blue;
     

@@ -1,3 +1,7 @@
+{% extends "layout.html" %}
+{% block title %}Leave a review{% endblock %}
+{% block content %}
+
 {% if session.user %}
 
 {% if error %}
@@ -23,14 +27,4 @@
 <a href="{{url_for('review_board')}}" class="button">Read other reviews here</a>
 <a href="{{url_for('index')}}" class="button">Home</a>
 
-<style>
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: black;
-        text-align: center;
-        background-color: blue;
-    
-    }
-</style>
+{% endblock %}

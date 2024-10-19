@@ -1,0 +1,58 @@
+<!doctype html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            background-color: blue;
+        }
+
+        .layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .footer {
+            text-align: left;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="content">
+            <h1 style="text-align: center;">The Organization</h1>
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="footer">
+            
+            {% if session.user %}
+
+            <p>You are currently logged in as {{session.user}}.</p>
+            <a href="{{url_for('user')}}" class="button">User page</a> 
+            <a href="{{url_for('logout_page')}}" class="button">Sign out</a> <br>
+
+            {% else %}
+
+            <a href="{{url_for('registration_page')}}" class="button">Register</a>
+            <a href="{{url_for('login_page')}}" class="button">Log in</a> <br>
+
+            {% endif %}
+
+            <a href="{{url_for('index')}}"" class="button">Home</a>
+            <a href="{{url_for('question_board')}}" class="button">Read questions</a>
+            <a href="{{url_for('review_page')}}" class="button">Leave a review</a> 
+        </div>
+    </div>
+</body>

@@ -1,5 +1,6 @@
-<title>Organization</title>
-
+{% extends "layout.html" %}
+{% block title %}The Organization{% endblock %}
+{% block content %}
 {% if session.user %}
 
 <p>You are already logged in as the user {{ session.user }}</p>
@@ -19,14 +20,4 @@
 
 <a href="{{url_for('index')}}"" class="button">Home</a>
 
-<style>
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: black;
-        text-align: center;
-        background-color: blue;
-    
-    }
-</style>
+{% endblock %}
