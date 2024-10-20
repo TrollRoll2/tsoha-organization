@@ -10,6 +10,10 @@
 <i>Question {{question[0]}}:</i>
 <p>
 <i>{{question[1]}}</i>
+{% if question[5] %}
+<p>
+<i>Answered by {{question[6]}}: {{question[5]}}</i>
+{% endif %}
 <hr>
 
 {% endfor %}

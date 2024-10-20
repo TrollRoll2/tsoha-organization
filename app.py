@@ -249,7 +249,9 @@ def question_page():
     
 @app.route("/questions")
 def question_board():
-    sql = text("SELECT * FROM questions WHERE approved = TRUE")
+    sql = text("""SELECT questions.id, questions.question, questions.user_id, questions.approved, answers.question_id, answers.answer, accounts.username
+                FROM questions LEFT JOIN answers ON questions.id = answers.question_id LEFT JOIN accounts ON answers.responder = accounts.id
+                WHERE questions.approved = TRUE ORDER BY questions.id DESC""")
     result = db.session.execute(sql)
     questions = result.fetchall()
     return render_template("question_board.html", questions=questions)
@@ -391,6 +393,12 @@ def admin_questions():
                 sql = text("UPDATE questions SET approved = TRUE WHERE id=:question_id")
                 result = db.session.execute(sql, {"question_id":question_id})
 
+            elif action == "Answer question":
+                answer = request.form["answer"]
+                responder = session["account_id"]
+                sql = text("INSERT INTO answers (answer, question_id, responder) VALUES (:answer, :question_id, :responder)")
+                result = db.session.execute(sql, {"answer":answer, "question_id":question_id, "responder":responder})
+
             db.session.commit()
             return redirect("/admin/questions")
         
@@ -406,8 +414,10 @@ def admin_questions():
             if admincheck[0] != "admin":
                 return render_template("unauthorized.html")
             
-            sql_questions = text("SELECT * FROM questions")
-            result = db.session.execute(sql_questions)
+            sql_answered = text("""SELECT questions.id, questions.question, questions.user_id, questions.approved, answers.question_id, answers.answer
+                                FROM questions LEFT JOIN answers ON questions.id = answers.question_id ORDER BY questions.id DESC""")
+            
+            result = db.session.execute(sql_answered)
             questions = result.fetchall()
             return render_template("admin_questions.html", questions=questions)
         

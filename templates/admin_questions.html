@@ -1,7 +1,7 @@
 {% for question in questions %}
 
 <hr>
-<i>id: {{question [0]}} user: {{question[2]}}</i> 
+<i>id: {{question[0]}} user: {{question[2]}}</i> 
 <p>
 <i>question: {{question[1]}}</i>
 <p>
@@ -12,9 +12,16 @@
     <p><input type="submit" name="action" value="Approve question" /></p>
     {% endif %}
     <p><input type="submit" name="action" value="Delete question" /></p>
+    {% if not question[4] %}
+    <p>Answer question: <input type="text" name="answer"></p>
+    <p><input type="submit" name="action" value="Answer question" /></p>
+    {% else %}
+    <p>Answer: {{question[5]}}</p>
+    {% endif %}
 </form>
 <hr>
 
 {% endfor %}
 
 <a href="{{url_for('index')}}" class="button">Home</a>
+<a href="{{url_for('control_center')}}" class=""button">Admin page</a>

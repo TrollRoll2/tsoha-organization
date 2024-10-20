@@ -28,3 +28,10 @@ CREATE TABLE events (
     creator_id INTEGER, 
     FOREIGN KEY (creator_id) REFERENCES accounts(id)
 ); 
+
+CREATE TABLE answers (
+    id SERIAL PRIMARY KEY, 
+    answer TEXT NOT NULL, 
+    question_id INT REFERENCES questions(id), 
+    responder INT REFERENCES accounts(id)
+);
