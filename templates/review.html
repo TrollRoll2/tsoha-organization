@@ -4,10 +4,6 @@
 
 {% if session.user %}
 
-{% if error %}
-    <p >{{ error }}</p>
-{% endif %}
-
 <p>You can leave a review below.</p>
 
 {% with messages = get_flashed_messages(with_categories=true) %}

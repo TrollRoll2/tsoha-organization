@@ -367,7 +367,11 @@ def admin_reviews():
             sql_reviews = text("SELECT * FROM reviews")
             result = db.session.execute(sql_reviews)
             reviews = result.fetchall()
-            return render_template("admin_reviews.html", reviews=reviews)
+            sql_amount = text("SELECT COUNT(id) FROM reviews")
+            amount = db.session.execute(sql_amount)
+            number = amount.fetchone()
+
+            return render_template("admin_reviews.html", reviews=reviews, number=number)
         
         except:
             return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
@@ -419,7 +423,12 @@ def admin_questions():
             
             result = db.session.execute(sql_answered)
             questions = result.fetchall()
-            return render_template("admin_questions.html", questions=questions)
+
+            sql_amount = text("SELECT COUNT(questions.id) AS qstcount, COUNT(DISTINCT answers.id) AS anscount FROM questions LEFT JOIN answers ON questions.id = answers.question_id")
+            amount = db.session.execute(sql_amount)
+            number = amount.fetchone()
+
+            return render_template("admin_questions.html", questions=questions, number=number)
         
         except:
             return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
@@ -467,10 +476,17 @@ def admin_events():
             if admincheck[0] != "admin":
                 return render_template("unauthorized.html")
             
-            sql_events = text("SELECT * FROM events")
+            time=date.today()
+            
+            sql_events = text("SELECT * FROM events ORDER BY event_date DESC")
             result = db.session.execute(sql_events)
             events = result.fetchall()
-            return render_template("admin_events.html", events=events)
+
+            sql_amount = text("SELECT COUNT(id) FROM events WHERE event_date >= :time")
+            amount = db.session.execute(sql_amount, {"time": time})
+            number = amount.fetchone()
+
+            return render_template("admin_events.html", events=events, number=number)
         
         except:
             return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
