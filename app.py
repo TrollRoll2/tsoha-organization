@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
@@ -95,8 +95,26 @@ def registration_page():
 
         username = request.form["username"]
         password = request.form["password"]
+
+        if len(username) < 6:
+            flash("Username must be at least 6 characters long.", "error")
+            return redirect(url_for('registration_page'))
+        
+        if len(password) < 6:
+            flash("Password must be at least 6 characters long.", "error")
+            return redirect(url_for('registration_page'))
+
         hash_pass = generate_password_hash(password)
+
         try:
+            sql_check = text("SELECT * FROM accounts WHERE username=:username")
+            result_check = db.session.execute(sql_check, {"username": username})
+            existing_user = result_check.fetchone()
+
+            if existing_user:
+                flash("Username is already taken.", "error")
+                return redirect(url_for('registration_page'))
+            
             sql = text("INSERT INTO accounts (username, password, role) VALUES (:username, :password, :role)")
             db.session.execute(sql, {"username":username, "password":hash_pass, "role":"member"})
             db.session.commit()
@@ -125,7 +143,8 @@ def login_page():
             user = result.fetchone()
 
             if user is None:
-                return render_template("error.html", message="User not found")
+                flash("User not found", "error")
+                return redirect(url_for('login_page'))
 
             if check_password_hash(user.password, password):
                 session["user"] = username
@@ -133,7 +152,8 @@ def login_page():
                 return redirect("/")
             
             else:
-                return render_template("error.html", message="Invalid password")
+                flash("Invalid password", "error")
+                return redirect(url_for('login_page'))
         
         except:
             return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
@@ -246,7 +266,8 @@ def review_page():
         sql_check = text("SELECT * FROM reviews WHERE user_id = :user_id")
         already = db.session.execute(sql_check, {"user_id": account_id}).fetchone()
         if already:
-            return render_template("review.html", error="You have already left a review. Users can only submit 1 review.")
+            flash("You have already left a review.", "error")
+            return redirect(url_for('review_page'))
         review = request.form["review"]
         rating = request.form["rating"]
         account = session["account_id"]
@@ -263,7 +284,10 @@ def review_board():
     sql = text("SELECT review, rating, user_id FROM reviews WHERE approved = TRUE")
     result = db.session.execute(sql)
     reviews = result.fetchall()
-    return render_template("review_board.html", reviews=reviews)
+    average = text("SELECT AVG(rating) FROM reviews WHERE approved = TRUE")
+    result2 = db.session.execute(average)
+    avrgresult = result2.fetchone()[0]
+    return render_template("review_board.html", reviews=reviews, avrgresult=round(avrgresult, 2))
 
 @app.route("/admin")
 def control_center():
