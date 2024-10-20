@@ -1,0 +1,30 @@
+<p>Add a new event?</p>
+<form action="#" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p>Name of the event:<input type="text" name="eventname" required /></p>
+    <p>Date:<input type="date" name="event_date" required /></p>
+    <p>Description:<input type="text" name="description"/></p>
+    <p><input type="submit" name="action" value="Create event"/></p>
+</form>
+
+{% for event in events %}
+
+<hr>
+<i>id: {{event[0]}} creator: {{event[4]}}</i> 
+<p>
+<i>event name: {{event[1]}}</i>
+<p>
+<i>event description: {{event[3]}}</i>
+<p>
+<i>date of event: {{event[2]}}</i>
+<p>
+<form action="#" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="event_id" value="{{event[0]}}" />
+    <p><input type="submit" name="action" value="Delete event" /></p>
+</form>
+<hr>
+
+{% endfor %}
+
+<a href="{{url_for('index')}}" class="button">Home</a>

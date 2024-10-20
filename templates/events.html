@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+<h1>Welcome the event page!</h1>
+<p>Upcoming events:</p>
+
+{% for event in events %}
+
+<hr>
+<i>{{event[1]}}</i>
+<p>
+<i>Description: {{event[3]}}</i>
+<p>
+<i>Date: {{event[2]}}</i>
+<hr>
+
+{% endfor %}
+
+<p>Recent past events:</p>
+
+<a href="{{url_for('index')}}" class="button">Home</a>
+
+{% endblock %}

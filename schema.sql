@@ -19,3 +19,12 @@ CREATE TABLE reviews (
     user_id INTEGER REFERENCES accounts,
     approved BOOLEAN DEFAULT FALSE
 );
+
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    eventname TEXT NOT NULL, 
+    event_date DATE NOT NULL, 
+    description TEXT, 
+    creator_id INTEGER, 
+    FOREIGN KEY (creator_id) REFERENCES accounts(id)
+); 

@@ -256,7 +256,7 @@ def question_board():
 @app.route("/review", methods=["POST", "GET"])
 def review_page():
     if "user" not in session:
-        redirect(url_for("login_page"))
+        return redirect(url_for("login_page"))
 
     if request.method == "POST":
         if not csrf_valid(request.form.get('csrf_token')):
@@ -288,6 +288,14 @@ def review_board():
     result2 = db.session.execute(average)
     avrgresult = result2.fetchone()[0]
     return render_template("review_board.html", reviews=reviews, avrgresult=round(avrgresult, 2))
+
+@app.route("/events")
+def event_board():
+    sql = text("SELECT * FROM events")
+    result = db.session.execute(sql)
+    events = result.fetchall()
+    return render_template("events.html", events=events)
+    
 
 @app.route("/admin")
 def control_center():
@@ -354,7 +362,7 @@ def admin_reviews():
 @app.route("/admin/questions", methods=["POST", "GET"])
 def admin_questions():
     if "user" not in session:
-        redirect(url_for("login_page"))
+        return redirect(url_for("login_page"))
 
     if request.method == "POST":
         if not csrf_valid(request.form.get('csrf_token')):
@@ -391,6 +399,57 @@ def admin_questions():
             result = db.session.execute(sql_questions)
             questions = result.fetchall()
             return render_template("admin_questions.html", questions=questions)
+        
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
+        
+@app.route("/admin/events", methods=["POST", "GET"])
+def admin_events():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
+
+        action = request.form["action"]
+
+        try:
+            if action == "Delete event":
+                event_id = request.form["event_id"]
+                sql = text("DELETE FROM events WHERE id=:event_id")
+                result = db.session.execute(sql, {"event_id":event_id})
+
+            elif action == "Create event":
+                eventname = request.form["eventname"]
+                event_date = request.form["event_date"]
+                description = request.form["description"]
+                creator_id = session["account_id"]
+
+                if eventname and event_date and creator_id:
+                    sql = text("INSERT INTO events (eventname, event_date, description, creator_id) VALUES (:eventname, :event_date, :description, :creator_id)")
+                    result = db.session.execute(sql, {"eventname":eventname, "event_date":event_date, "description":description, "creator_id":creator_id})
+
+            db.session.commit()
+            return redirect("/admin/events")
+        
+        except:
+            return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
+
+    if request.method == "GET":
+
+        try:
+            account_id = session["account_id"]
+            sql = text("SELECT role FROM accounts WHERE id = :user_id")
+            admincheck = db.session.execute(sql, {"user_id": account_id}).fetchone()
+            if admincheck[0] != "admin":
+                return render_template("unauthorized.html")
+            
+            sql_events = text("SELECT * FROM events")
+            result = db.session.execute(sql_events)
+            events = result.fetchall()
+            return render_template("admin_events.html", events=events)
         
         except:
             return render_template("error.html", message="Something seems to have broken. If this error occurs again, please contact an admin")
