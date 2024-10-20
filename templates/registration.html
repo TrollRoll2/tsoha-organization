@@ -9,6 +9,7 @@
 {% else %}
 <h1>Register an account here:</h1>
 <form action="{{url_for('registration_page')}}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <p>Username:</p>
     <p><input type="text" name="username" required /></p>
     <p>Password:</p>

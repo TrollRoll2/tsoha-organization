@@ -5,6 +5,7 @@ from sqlalchemy.sql import text
 from os import getenv
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
+import secrets
 
 load_dotenv()
 
@@ -12,6 +13,20 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.secret_key = getenv("SECRET_KEY")
 db = SQLAlchemy(app)
+
+def csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_hex(16) 
+    return session['csrf_token']
+
+def csrf_valid(token):
+    if session.get('csrf_token') != token:
+        return False
+    return True
+
+@app.context_processor
+def csrf_function():
+    return {'csrf_token': csrf_token()}
 
 @app.route("/")
 def index():
@@ -75,6 +90,9 @@ def registration_page():
         return render_template("registration.html")
 
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         username = request.form["username"]
         password = request.form["password"]
         hash_pass = generate_password_hash(password)
@@ -95,6 +113,9 @@ def registration_page():
 @app.route("/login", methods=["POST", "GET"])
 def login_page():
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         username = request.form["username"]
         password = request.form["password"]
         
@@ -138,6 +159,9 @@ def user():
 @app.route("/user/questions", methods=["POST", "GET"])
 def user_questions():
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         question = request.form["question"]
         try:
             sql = text("DELETE FROM questions WHERE id=:question")
@@ -162,6 +186,9 @@ def user_questions():
 @app.route("/user/review", methods=["POST", "GET"])
 def user_review():
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+        
         account_id = session["account_id"]
         try:
             sql = text("DELETE FROM reviews WHERE user_id=:account_id")
@@ -186,6 +213,9 @@ def user_review():
 @app.route("/question", methods=["POST", "GET"])
 def question_page():
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         question = request.form["question"]
         account = session["account_id"]
         sql = text("INSERT INTO questions (question, user_id) VALUES (:question, :user_id)")
@@ -209,6 +239,9 @@ def review_page():
         redirect(url_for("login_page"))
 
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         account_id = session["account_id"]
         sql_check = text("SELECT * FROM reviews WHERE user_id = :user_id")
         already = db.session.execute(sql_check, {"user_id": account_id}).fetchone()
@@ -256,6 +289,9 @@ def admin_reviews():
         return redirect(url_for("login_page"))
 
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         review_id = request.form["review_id"]
         action = request.form["action"]
 
@@ -297,6 +333,9 @@ def admin_questions():
         redirect(url_for("login_page"))
 
     if request.method == "POST":
+        if not csrf_valid(request.form.get('csrf_token')):
+            return render_template("error.html", message="CSRF token is invalid")
+
         question_id = request.form["question_id"]
         action = request.form["action"]
 

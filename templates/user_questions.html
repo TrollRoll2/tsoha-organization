@@ -8,6 +8,7 @@
 <i>{{question[1]}}</i>
 <p>
 <form action="#" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="hidden" name="question" value="{{ question[0] }}" />
     <p><input type="submit" value="Delete question" /></p>
 </form>

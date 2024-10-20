@@ -8,6 +8,7 @@
 <i>score: {{review[2]}}</i>
 <p>
 <form action="#" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="hidden" name="review_id" value="{{review [0]}}" />
     {% if review[4] == False %}
     <p><input type="submit" name="action" value="Approve review" /></p>
@@ -19,4 +20,4 @@
 {% endfor %}
 
 <a href="{{url_for('index')}}" class="button">Home</a>
-<a href="{{urlf_for('control_center')}}" class=""button">Admin page</a>
+<a href="{{url_for('control_center')}}" class=""button">Admin page</a>

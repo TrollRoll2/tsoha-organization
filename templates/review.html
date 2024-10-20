@@ -10,6 +10,7 @@
 
 <p>You can leave a review below.</p>
 <form action="{{url_for('review_page')}}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <p>Write your review here:</p>
     <textarea name="review" required></textarea>
     <p>Give a rating from 1-10</p>

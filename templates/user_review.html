@@ -6,6 +6,7 @@
 <i>{{review[0]}} {{review[1]}}/10</i>
 <p>
 <form action="#" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <p><input type="submit" value="Delete review" /></p>
 </form>
 <hr>

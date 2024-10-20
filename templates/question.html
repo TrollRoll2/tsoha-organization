@@ -6,6 +6,7 @@
 
 <p>You can leave a question regarding the organization below.</p>
 <form action="{{url_for('question_page')}}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <p>Question:</p>
     <p><input type="text" name="question" required /></p>
     <p><input type="submit" value="Send question"/></p>
