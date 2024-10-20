@@ -73,7 +73,8 @@ def account(id):
         sql_account = text("SELECT username FROM accounts WHERE id = :account_id")
         result = db.session.execute(sql_account, {"account_id":id})
         user = result.fetchone()
-        sql_questions = text("SELECT id, question, approved FROM questions WHERE user_id = :account_id")
+        sql_questions = text("""SELECT questions.id, questions.question, questions.approved, answers.question_id FROM questions LEFT JOIN answers
+                                ON questions.id = answers.question_id WHERE user_id = :account_id""")
         result2 = db.session.execute(sql_questions, {"account_id":id})
         questions = result2.fetchall()
         sql_review = text("SELECT review, rating FROM reviews WHERE user_id = :account_id")

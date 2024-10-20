@@ -6,6 +6,10 @@
 <i>Question:</i>
 <p>
 <i>{{question[1]}}</i>
+{% if question[2] %}
+<p>
+<i>Answer: {{question2}}</i>
+{% endif %}
 <p>
 <form action="#" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">

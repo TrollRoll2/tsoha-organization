@@ -8,6 +8,8 @@
 <i>{{question[1]}}</i>
 <p>
 <i>Approved: {{question[2]}}</i>
+<p>
+<i>Answered: {{ 'Yes' if question[3] else 'No' }}</i>
 <hr>
 
 {% endfor %}
