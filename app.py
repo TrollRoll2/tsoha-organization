@@ -5,6 +5,7 @@ from sqlalchemy.sql import text
 from os import getenv
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import date
 import secrets
 
 load_dotenv()
@@ -291,11 +292,21 @@ def review_board():
 
 @app.route("/events")
 def event_board():
-    sql = text("SELECT * FROM events")
-    result = db.session.execute(sql)
-    events = result.fetchall()
-    return render_template("events.html", events=events)
-    
+    time = date.today()
+
+    sql_upcoming = text("""SELECT events.eventname, events.event_date, events.description, accounts.username 
+                        FROM events JOIN accounts ON events.creator_id = accounts.id
+                        WHERE events.event_date >= :time ORDER BY events.event_date ASC""")
+    result = db.session.execute(sql_upcoming, {"time":time})
+    upcoming = result.fetchall()
+
+    sql_past = text("""SELECT events.eventname, events.event_date, events.description, accounts.username 
+                        FROM events JOIN accounts ON events.creator_id = accounts.id
+                        WHERE events.event_date < :time ORDER BY events.event_date DESC""")
+    result = db.session.execute(sql_past, {"time":time})
+    past = result.fetchall()
+
+    return render_template("events.html", upcoming=upcoming, past=past)
 
 @app.route("/admin")
 def control_center():

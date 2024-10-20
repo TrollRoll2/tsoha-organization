@@ -2,21 +2,37 @@
 {% block title %}Events{% endblock %}
 {% block content %}
 <h1>Welcome the event page!</h1>
-<p>Upcoming events:</p>
+<h2>Upcoming events:</h2>
 
-{% for event in events %}
+{% for event in upcoming %}
 
 <hr>
-<i>{{event[1]}}</i>
+<i>{{event[0]}}</i>
 <p>
-<i>Description: {{event[3]}}</i>
+<i>Description: {{event[2]}}</i>
 <p>
-<i>Date: {{event[2]}}</i>
+<i>Date: {{event[1]}}</i>
+<p>
+<i>Organizer: {{event[3]}}</i>
 <hr>
 
 {% endfor %}
 
-<p>Recent past events:</p>
+<h2>Recent past events:</h2>
+
+{% for event in past %}
+
+<hr>
+<i>{{event[0]}}</i>
+<p>
+<i>Description: {{event[2]}}</i>
+<p>
+<i>Date: {{event[1]}}</i>
+<p>
+<i>Organizer: {{event[3]}}</i>
+<hr>
+
+{% endfor %}
 
 <a href="{{url_for('index')}}" class="button">Home</a>
 
